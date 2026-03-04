@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>股市術語白話翻譯機</title>
+    <style>
+        :root {
+            --sidebar-width: 280px;
+            --primary-color: #2563eb;
+            --bg-color: #f8fafc;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+            --hover-color: #eff6ff;
+            --selected-color: #dbeafe;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: white;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .search-box {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        .term-list {
+            flex: 1;
+            overflow-y: auto;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .term-item {
+            padding: 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .term-item:hover {
+            background-color: var(--hover-color);
+        }
+
+        .term-item.active {
+            background-color: var(--selected-color);
+            border-left: 4px solid var(--primary-color);
+            font-weight: 600;
+        }
+
+        .badge {
+            font-size: 0.75rem;
+            background: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #64748b;
+        }
+
+        /* Main Content Styles */
+        .content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            background-color: white;
+        }
+
+        .welcome-msg {
+            color: #64748b;
+            text-align: center;
+            margin-top: 20vh;
+        }
+
+        .content-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: none;
+            /* Hidden by default */
+        }
+
+        /* Card Styles */
+        .definition-card {
+            margin-bottom: 3rem;
+            /* Spacing between stacked cards */
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 2rem;
+        }
+
+        .definition-card:last-child {
+            border-bottom: none;
+        }
+
+        .term-title {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        .term-category {
+            display: inline-block;
+            background-color: #e2e8f0;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            color: #475569;
+            margin-bottom: 2rem;
+        }
+
+        .section {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .section-formal {
+            background-color: #f1f5f9;
+            border-left: 4px solid #64748b;
+        }
+
+        .section-plain {
+            background-color: #ecfdf5;
+            border-left: 4px solid #10b981;
+        }
+
+        .section-logic {
+            background-color: #fff7ed;
+            border-left: 4px solid #f97316;
+        }
+
+        .section-life {
+            background-color: #fce7f3;
+            border-left: 4px solid #db2777;
+        }
+
+        /* Pink for Life Example */
+
+        /* Special styling for Mindset section */
+        .section-gold {
+            background-color: #fffbeb;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .icon-gold::before {
+            content: "👑";
+        }
+
+        .icon-life::before {
+            content: "🍎";
+        }
+
+        /* Apple icon for life example */
+
+        h3 {
+            margin-top: 0;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .icon-formal::before {
+            content: "📚";
+        }
+
+        .icon-plain::before {
+            content: "💡";
+        }
+
+        .icon-logic::before {
+            content: "⚙️";
+        }
+
+        .group-header {
+            background: #eff6ff;
+            color: #1e40af;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border: 1px solid #bfdbfe;
+        }
+
+        /* Portfolio Table Inputs */
+        .inp-num {
+            width: 90px;
+            padding: 4px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            text-align: right;
+        }
+
+        .inp-num:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        .text-green {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        .text-red {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .fw-bold {
+            font-weight: bold;
+        }
+
+        /* Refresh Button Styles */
+        .refresh-btn {
+            margin-top: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            padding: 3px 6px;
+            border: 1px solid #cbd5e1;
+            background: white;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            color: #475569;
+            transition: all 0.2s;
+        }
+
+        .refresh-btn:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .refresh-btn:active {
+            background: #e2e8f0;
+        }
+
+        .refresh-btn svg {
+            transition: transform 0.5s;
+        }
+
+        .refresh-btn.spinning svg {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* RWD Styles */
+        .menu-btn {
+            display: none;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 8px 12px;
+            color: var(--text-color);
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            z-index: 30;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 40;
+        }
+
+        @media (max-width: 768px) {
+            .menu-btn {
+                display: block;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                left: -300px;
+                z-index: 50;
+                transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .overlay.open {
+                display: block;
+            }
+
+            .content {
+                padding: 4.5rem 1rem 1rem 1rem;
+            }
+
+            .term-title {
+                font-size: 1.5rem;
+            }
+
+            .welcome-msg {
+                padding: 0 1rem;
+            }
+
+            .portfolio-table {
+                font-size: 0.8rem !important;
+            }
+
+            .portfolio-table th,
+            .portfolio-table td {
+                padding: 6px !important;
+            }
+
+            .inp-num {
+                width: 65px;
+                font-size: 0.8rem;
+                padding: 2px 4px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="搜尋術語..." id="searchInput">
+        </div>
+        <ul class="term-list" id="termList">
+            <!-- JS Populated -->
+        </ul>
+    </div>
+
+    <div class="content">
+        <button class="menu-btn" onclick="toggleMenu()">☰ 選單</button>
+        <div id="welcome" class="welcome-msg">
+            <h2>請從左側選擇一個術語</h2>
+            <p>部分主題包含多個相關概念，可一次閱讀</p>
+        </div>
+
+        <div id="mainContainer" class="content-container">
+            <!-- Cards will be injected here -->
+        </div>
+    </div>
+
+    <script>
+        // 資料結構：支援 "single" (單一) 或 "group" (組合包)
+        const terms = [
+            {
+                id: "portfolio-strategy",
+                type: "group",
+                title: "月月配現金流 (自組 ETF)",
+                items: [
+                    {
+                        term: "自組月月配 (DIY Monthly Income)",
+                        category: "資產配置",
+                        formal: "透過購買配息月份錯開的 ETF (如 1/4/7/10、2/5/8/11、3/6/9/12)，組合成每個月都能領息的現金流系統。",
+                        logic: "<ul><li><strong>優點 1 (不被綁架)：</strong>避開單一「月月配ETF」的選股邏輯風險。</li><li><strong>優點 2 (產業互補)：</strong>可以同時納入「高股息」(領息) 與「半導體」(賺價差)，攻守兼備。</li></ul>",
+                        plain: "每個月都有薪水領。不用靠別人包好的便當(單一ETF)，自己夾菜(0056+00891+00919)，營養更均衡，而且每個月都有錢進帳。",
+                        life: `
+                        <strong>生活實例：收租公的智慧</strong><br>
+                        1. <strong>單壓：</strong>只買一間大套房出租，萬一房客跑了(單一策略失效)，這個月就沒收入。<br>
+                        2. <strong>分散：</strong>買三間小套房，合約錯開。A房客這個月沒繳，B跟C還是會給錢。而且其中一間可以租給開公司的(半導體)，租金漲幅更大。
+                        <br><br>
+                        <strong class="portfolio-title-hint">您的黃金組合 (動態試算)：</strong>
+                        <div style="overflow-x:auto;">
+                        <table class="portfolio-table" style="width:100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem;">
+                            <thead>
+                                <tr style="background:#f1f5f9; text-align:left;">
+                                    <th style="padding:8px;">代號</th>
+                                    <th style="padding:8px;">配息月份</th>
+                                    <th style="padding:8px;">近期配息</th>
+                                    <th style="padding:8px;">年化殖利率</th>
+                                    <th style="padding:8px;">股數 (Shares)</th>
+                                    <th style="padding:8px;">持有成本</th>
+                                    <th style="padding:8px; text-align:center;">現價<br><button onclick="handleManualRefresh(this, event)" class="refresh-btn"><svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"></path><path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path><path d="M3 22v-6h6"></path><path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path></svg> 整理</button></th>
+                                    <th style="padding:8px;">帳面損益</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid #e2e8f0;" oninput="calcRow(this)">
+                                    <td style="padding:8px; font-weight:bold;">0056</td>
+                                    <td style="padding:8px;">1, 4, 7, 10</td>
+                                    <td style="padding:8px;">$0.866</td>
+                                    <td style="padding:8px; color:#16a34a;">9.69%</td>
+                                    <td style="padding:8px;"><input type="number" value="5000" step="100" class="inp-num p-share"></td>
+                                    <td style="padding:8px;"><input type="number" value="32.10" step="0.01" class="inp-num p-cost"></td>
+                                    <td style="padding:8px;"><input type="number" value="37.55" step="0.01" class="inp-num p-price"></td>
+                                    <td style="padding:8px; font-weight:bold;" class="p-profit">--</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #e2e8f0;" oninput="calcRow(this)">
+                                    <td style="padding:8px; font-weight:bold;">00891</td>
+                                    <td style="padding:8px;">2, 5, 8, 11</td>
+                                    <td style="padding:8px;">$0.60</td>
+                                    <td style="padding:8px; color:#16a34a;">9.15%</td>
+                                    <td style="padding:8px;"><input type="number" value="5000" step="100" class="inp-num p-share"></td>
+                                    <td style="padding:8px;"><input type="number" value="18.02" step="0.01" class="inp-num p-cost"></td>
+                                    <td style="padding:8px;"><input type="number" value="23.23" step="0.01" class="inp-num p-price"></td>
+                                    <td style="padding:8px; font-weight:bold;" class="p-profit">--</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; font-weight:bold;" oninput="calcRow(this)">00919</td>
+                                    <td style="padding:8px;">3, 6, 9, 12</td>
+                                    <td style="padding:8px;">$0.54</td>
+                                    <td style="padding:8px; color:#16a34a;">10.76%</td>
+                                    <td style="padding:8px;"><input type="number" value="19000" step="100" class="inp-num p-share"></td>
+                                    <td style="padding:8px;"><input type="number" value="21.15" step="0.01" class="inp-num p-cost"></td>
+                                    <td style="padding:8px;"><input type="number" value="23.31" step="0.01" class="inp-num p-price"></td>
+                                    <td style="padding:8px; font-weight:bold;" class="p-profit">--</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr style="background:#f8fafc; font-weight:bold; border-top: 2px solid #bfdbfe;">
+                                    <td colspan="7" style="text-align:right; padding:12px; border-bottom:1px solid #e2e8f0;">持有成本總額：</td>
+                                    <td id="totalCost" style="padding:12px; border-bottom:1px solid #e2e8f0; font-size:1.05rem; color:#475569;">--</td>
+                                </tr>
+                                <tr style="background:#f8fafc; font-weight:bold;">
+                                    <td colspan="7" style="text-align:right; padding:12px; border-bottom:1px solid #e2e8f0;">帳面價值總計：</td>
+                                    <td id="totalValue" style="padding:12px; border-bottom:1px solid #e2e8f0; font-size:1.05rem; color:#1e293b;">--</td>
+                                </tr>
+                                <tr style="background:#eff6ff; font-weight:bold;">
+                                    <td colspan="7" style="text-align:right; padding:12px;">預估損益：</td>
+                                    <td id="totalProfit" style="padding:12px; font-size:1.1rem;">--</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        </div>
+                        <p style="font-size:0.85rem; color:#64748b; margin-top:5px;">* 點擊數值欄位可使用鍵盤上下鍵調整 (股數±100 / 價格±0.01)；損益將自動重算。</p>
+                    `
+                    },
+                    {
+                        term: "現金流 (Cash Flow)",
+                        category: "財務目標",
+                        formal: "資產定期產生的現金收入，不需賣出本金。",
+                        logic: "<ul><li><strong>存量 vs 流量：</strong>資產是水庫，現金流是水龍頭。</li><li><strong>目的：</strong>支付日常開銷，或再投入(複利)。</li></ul>",
+                        plain: "睡後收入。不用賣股票，時間到了錢就會自動匯進戶頭，像是養了一隻會下金蛋的鵝。"
+                    },
+                    {
+                        term: "資本利得 (Capital Gain)",
+                        category: "獲利來源",
+                        formal: "資產價格上漲帶來的獲利 (價差)。",
+                        logic: "<ul><li><strong>公式：</strong>賣出價 - 買入成本。</li><li><strong>特點：</strong>通常比股息多，但波動大且不穩定。</li></ul>",
+                        plain: "低買高賣賺價差。像是買房子不為了收租，而是等房價漲了賣掉賺一筆大的。"
+                    }
+                ]
+            },
+            {
+                id: "g2",
+                type: "group",
+                title: "員工信託賽局 (內卷互割)",
+                items: [
+                    {
+                        term: "內卷效應 (Cannibalism)",
+                        category: "賽局理論",
+                        formal: "內部人利用已知資訊互相競爭，導致集體利益受損。",
+                        logic: "<ul><li><strong>聰明員工：</strong>提早買，當天倒貨給公司賺價差。</li><li><strong>老實員工：</strong>乖乖等扣款，結果買到聰明同事倒出來的貨。</li></ul>",
+                        plain: "自己人殺自己人。大家都想吃公司豆腐，結果變成 3000 個員工搶著倒貨給自己的信託帳戶。"
+                    },
+                    {
+                        term: "零和遊戲 (Zero-Sum)",
+                        category: "賽局理論",
+                        formal: "一方的獲利必然來自另一方的虧損。",
+                        logic: "<ul><li><strong>賺錢：</strong>做價差的員工 (賺走了流動性)。</li><li><strong>賠錢：</strong>信託專戶 (買在相對高點或承受賣壓)。</li></ul>",
+                        plain: "你賺的那些便當錢，其實是從你同事(和你自己)的退休金帳戶裡挖出來的。"
+                    },
+                    {
+                        term: "囚徒困境 (Prisoner's Dilemma)",
+                        category: "賽局理論",
+                        formal: "個人最佳選擇導致集體最差結果。",
+                        logic: "<ul><li><strong>若大家都不賣：</strong>信託買盤推升股價，全員獲利。</li><li><strong>若大家都賣：</strong>賣壓 > 買盤，股價下跌，全員套牢。</li></ul>",
+                        plain: "如果大家都不吃豆腐，股價會漲；但每個人都怕別人先跑，所以大家都先跑，結果股價反而跌了。"
+                    }
+                ]
+            },
+            {
+                id: "g5",
+                type: "group",
+                title: "多方操作 (做多/買進)",
+                items: [
+                    {
+                        term: "做多 (Long Buying)",
+                        category: "買進",
+                        formal: "買進持有資產，期待價格上漲。",
+                        logic: "<ul><li><strong>操作：</strong>低價買進 ➔ 高價賣出。</li><li><strong>獲利：</strong>賺取上漲的價差。</li></ul>",
+                        plain: "最直覺的買股票。我看好這家公司，先買起來放，等它漲價了再賣。",
+                        life: `
+                        <strong>生活實例：趁便宜換日幣</strong><br>
+                        1. <strong>做多：</strong>下個月要去日本，現在匯率便宜(0.21)，您先換 10 萬日幣放著。<br>
+                        2. <strong>獲利：</strong>如果下個月匯率漲到 0.25，您就賺到了(省錢)。這就是持有資產期待升值。
+                    `
+                    },
+                    {
+                        term: "攤平 (Averaging Down)",
+                        category: "加碼",
+                        formal: "股價下跌時加碼買進，以降低平均成本。",
+                        logic: "<ul><li><strong>目的：</strong>讓解套的價格降低。</li><li><strong>風險：</strong>若趨勢沒反轉，會越攤越平(賠更多)。</li></ul>",
+                        plain: "越跌越買。原本買在45元，跌到40元再買一張，平均成本就變成42.5元。只要漲回43元就能賺錢，不用等到45元。"
+                    },
+                    {
+                        term: "追價 (Chase High)",
+                        category: "攻擊",
+                        formal: "在股價上漲過程中買進。",
+                        logic: "<ul><li><strong>心態：</strong>怕買不到，寧願買貴。</li><li><strong>時機：</strong>突破壓力區時 (如站上月線)。</li></ul>",
+                        plain: "火車開了趕快跳上去。雖然現在買比較貴，但因為氣勢很強，覺得後面還會更貴，所以趕快上車。"
+                    }
+                ]
+            },
+            {
+                id: "g4",
+                type: "group",
+                title: "空方操作與籌碼戰",
+                items: [
+                    {
+                        term: "借券賣出 (Short Selling)",
+                        category: "做空",
+                        formal: "向券商借股票來賣出，期待股價下跌。",
+                        logic: "<ul><li><strong>操作：</strong>先賣(45元) ➔ 後買(43元) ➔ 還股票。</li><li><strong>獲利：</strong>賺取下跌的價差 (2元)。</li></ul>",
+                        plain: "看衰這檔股票。手上沒股票也沒關係，先跟別人借來賣，等跌下去了再買回來還，賺中間的差價。",
+                        life: `
+                        <strong>生活實例：iPhone 16 預購轉賣</strong><br>
+                        1. <strong>借券賣出：</strong>iPhone 剛出很貴(3萬)，您覺得下個月會跌。跟朋友借一支全新機，立刻用3萬賣給路人 (拿現金)。<br>
+                        2. <strong>等待下跌：</strong>過一個月，真的跌到2萬了。<br>
+                        3. <strong>回補還券：</strong>您花2萬買一支新的還朋友，口袋現賺1萬價差。<br>
+                        4. <strong>風險(軋空)：</strong>萬一沒跌反而漲到10萬，您還是得花10萬買來還，倒賠7萬。
+                    `
+                    },
+                    {
+                        term: "回補 (Covering)",
+                        category: "做空",
+                        formal: "買回股票以歸還借券。",
+                        logic: "<ul><li><strong>性質：</strong>這是一股【必買】的買盤力量。</li><li><strong>時機：</strong>獲利了結時，或被迫停損時。</li></ul>",
+                        plain: "空軍撤退。借來的股票終究要還，所以空方最後一定要進場買股票，這時候反而會推升股價。"
+                    },
+                    {
+                        term: "軋空 (Short Squeeze)",
+                        category: "多空對決",
+                        formal: "股價上漲，迫使空方停損買回，進而助漲。",
+                        logic: "<ul><li><strong>劇本：</strong>空方賣在45，結果股價漲到48。</li><li><strong>後果：</strong>空方賠錢怕爆倉，只好不計價買回，反而把股價推到 50。</li></ul>",
+                        plain: "空軍被多軍關廁所暴打。想做空結果股價大漲，空方為了止血只好含淚買回，結果越買股價漲越兇。"
+                    },
+                    {
+                        term: "高空低補",
+                        category: "操作手法",
+                        formal: "高點放空，低點回補。",
+                        logic: "<ul><li><strong>目的：</strong>做空方的獲利公式。</li><li><strong>風險：</strong>若變成【低空高補】，就是被軋空。</li></ul>",
+                        plain: "理想劇本：45元賣、40元買回來。這是所有做空的人最想做的事。"
+                    }
+                ]
+            },
+            {
+                id: "g1",
+                type: "group",
+                title: "掠奪性交易全集",
+                items: [
+                    {
+                        term: "掠奪性交易 (Predatory Trading)",
+                        category: "主力心理",
+                        formal: "利用對手「非買不可」的流動性需求，先行卡位。",
+                        logic: "<ul><li><strong>獵人：</strong>投機客。</li><li><strong>獵物：</strong>員工信託/ETF。</li><li><strong>弱點：</strong>必須在特定時間買入。</li></ul>",
+                        plain: "我知道你 12 號一定要買，我就先買光籌碼，等你被迫用高價跟我買。"
+                    },
+                    {
+                        term: "吃豆腐 (Front-running)",
+                        category: "市場俗稱",
+                        formal: "在已知大單進場前，先行買入坐轎。",
+                        logic: "<ul><li><strong>行為：</strong>搶先交易。</li><li><strong>目的：</strong>賺取大單進場時的推升價差。</li></ul>",
+                        plain: "知道你要來抬轎，我先上車等你抬。"
+                    },
+                    {
+                        term: "軋空手 (Squeeze)",
+                        category: "操作結果",
+                        formal: "迫使空手者或放空者必須追高回補。",
+                        logic: "<ul><li><strong>原理：</strong>市場上沒貨了，你又非買不可，只能不斷往上追價。</li></ul>",
+                        plain: "你想買但買不到，因為都被我鎖住了，你只能含淚用超高價跟我買。"
+                    }
+                ]
+            },
+            {
+                id: "g3",
+                type: "group",
+                title: "技術分析訊號 (多空判讀)",
+                items: [
+                    {
+                        term: "跌破月線 (短空訊號)",
+                        category: "趨勢向下",
+                        formal: "股價掉到20日移動平均線之下。",
+                        logic: "<ul><li><strong>月線 (20MA)：</strong>過去20天大家的平均成本。</li><li><strong>意義：</strong>近一個月買的人都賠錢，容易引發停損賣壓。</li></ul>",
+                        plain: "氣氛轉差。最近進場的人都被套牢了，大家想逃跑，股價容易繼續跌。"
+                    },
+                    {
+                        term: "站上月線 (短多訊號)",
+                        category: "趨勢向上",
+                        formal: "股價突破並站穩20日移動平均線之上。",
+                        logic: "<ul><li><strong>意義：</strong>近一個月買的人都賺錢了。</li><li><strong>影響：</strong>獲利的人惜售，沒買的人想追，籌碼變穩定。</li></ul>",
+                        plain: "氣氛轉好。大家都賺錢，沒人想賣，股價容易繼續漲。"
+                    },
+                    {
+                        term: "關鍵支撐 (季線)",
+                        category: "生命線",
+                        formal: "60日移動平均線 (季線)。",
+                        logic: "<ul><li><strong>原理：</strong>過去三個月的長線成本。</li><li><strong>重要性：</strong>中長線投資人的防守底線。</li></ul>",
+                        plain: "如果跌破這條線，代表連抱了三個月的人都賠錢，會引發長線恐慌。"
+                    },
+                    {
+                        term: "均線糾結 (變盤前兆)",
+                        category: "能量累積",
+                        formal: "短、中、長期的均線黏在一起。",
+                        logic: "<ul><li><strong>意義：</strong>市場成本一致，多空勢均力敵。</li><li><strong>後果：</strong>即將出現大漲或大跌 (表態)。</li></ul>",
+                        plain: "暴風雨前的寧靜。大家成本都一樣，沒人賺也沒人賠。這時候只要有一方發動攻擊，股價就會噴出(或崩盤)。"
+                    },
+                    {
+                        term: "乖離率過大 (物極必反)",
+                        category: "風險指標",
+                        formal: "股價距離均線太遠 (漲太多或跌太深)。",
+                        logic: "<ul><li><strong>原理：</strong>橡皮筋拉太緊會彈回來。</li><li><strong>正乖離：</strong>漲太多，隨時會回檔。</li><li><strong>負乖離：</strong>跌太深，隨時會反彈。</li></ul>",
+                        plain: "漲過頭了。像是橡皮筋拉到極限，接下來一定會縮回來 (修正)。"
+                    }
+                ]
+            },
+            {
+                id: "t1", type: "single",
+                term: "回檔修正", category: "趨勢形態",
+                formal: "股價漲多後休息，向下跌回來。",
+                logic: "<ul><li><strong>對象：</strong>想賣 > 想買。</li><li><strong>原因：</strong>獲利了結。</li></ul>",
+                plain: "漲多休息。因為之前漲太兇，大家覺得貴，價格掉下來尋找支撐。"
+            },
+            {
+                id: "t3", type: "single",
+                term: "層層壓力", category: "阻力分析",
+                formal: "上方有大量套牢賣壓。",
+                logic: "<ul><li><strong>來源：</strong>住樓上的套牢者。</li><li><strong>行為：</strong>解套就賣。</li></ul>",
+                plain: "上面住著很多賠錢想解套的人，股價一漲上去他們就賣，把價格打下來。"
+            },
+            {
+                id: "t5", type: "single",
+                term: "外資賣壓", category: "籌碼籌碼",
+                formal: "外資機構大量拋售。",
+                logic: "<ul><li><strong>特徵：</strong>不計價拋售，量大。</li></ul>",
+                plain: "真正的倒貨。大戶為了避險不管價格多少都賣，股價直接被打趴。"
+            },
+            {
+                id: "t6", type: "single",
+                term: "獲利了結", category: "交易行為",
+                formal: "賣出股票將獲利變現。",
+                logic: "<ul><li><strong>心態：</strong>落袋為安。</li></ul>",
+                plain: "賺夠了，先把股票換成現金，不想賭後面的漲跌。"
+            },
+            {
+                id: "final", type: "single",
+                term: "微笑曲線 (反脆弱心法)", category: "存股心法",
+                formal: "利用定期定額與市場波動，達到長期平均成本的最佳化。",
+                logic: `
+                <ul>
+                    <li><strong>漲的時候：</strong>資產價值增加，獲利讓人開心。</li>
+                    <li><strong>跌的時候：</strong>同樣的錢買到更多股數 (DCA)，累積籌碼。</li>
+                    <li><strong>結論：</strong>只要有波動都是好事，最怕的是死魚盤。</li>
+                </ul>
+            `,
+                plain: "漲也贏、跌也贏。跌的時候我能撿便宜貨，等未來漲上去時，這些便宜貨會讓我賺更多。這就是存股族必勝的微笑曲線。"
+            }
+        ];
+
+        const termListEl = document.getElementById('termList');
+        const container = document.getElementById('mainContainer');
+        const searchInput = document.getElementById('searchInput');
+
+        function renderList(filter = '') {
+            termListEl.innerHTML = '';
+            terms.forEach(item => {
+                const displayName = item.type === 'group' ? item.title : item.term;
+                if (!displayName.includes(filter)) return;
+
+                const li = document.createElement('li');
+                li.className = 'term-item';
+
+                let html = `<span>${displayName}</span>`;
+                if (item.type === 'group') {
+                    html += `<span class="badge">${item.items.length} 合一</span>`;
+                }
+                if (item.id === 'final') {
+                    html = `<span style="color:#b45309; font-weight:bold;">👑 ${displayName}</span>`;
+                }
+                li.innerHTML = html;
+
+                li.onclick = () => loadContent(item, li);
+                termListEl.appendChild(li);
+            });
+        }
+
+        function loadContent(data, li) {
+            // Active State
+            document.querySelectorAll('.term-item').forEach(el => el.classList.remove('active'));
+            if (li) li.classList.add('active');
+
+            // Show Container
+            document.getElementById('welcome').style.display = 'none';
+            container.style.display = 'block';
+            container.innerHTML = '';
+            container.scrollTop = 0;
+
+            // Render Group Header if Group
+            if (data.type === 'group') {
+                const header = document.createElement('div');
+                header.className = 'group-header';
+                header.innerHTML = `<h2>${data.title}</h2><p>此主題包含 ${data.items.length} 個相關概念，已為您合併顯示。</p>`;
+                container.appendChild(header);
+
+                data.items.forEach(subItem => {
+                    container.appendChild(createCard(subItem));
+                });
+            } else {
+                // Single Item
+                container.appendChild(createCard(data));
+            }
+
+            // Initialize Portfolio Calc if table exists
+            if (container.querySelector('.portfolio-table')) {
+                container.querySelectorAll('.portfolio-table tbody tr').forEach(tr => calcRow(tr));
+                if (Object.keys(latestQuotes).length > 0) {
+                    updateQuotesInTable();
+                }
+            }
+
+            // Close sidebar automatically on mobile
+            if (window.innerWidth <= 768) {
+                toggleMenu(false);
+            }
+        }
+
+        // Toggle Sidebar Menu
+        function toggleMenu(forceState) {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            if (forceState === false) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('open');
+            } else {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('open');
+            }
+        }
+
+        function createCard(t) {
+            const div = document.createElement('div');
+            div.className = 'definition-card';
+
+            let logicClass = "section-logic";
+            let iconLogic = "icon-logic";
+
+            if (t.category === "存股心法") {
+                logicClass = "section-gold";
+                iconLogic = "icon-gold";
+            }
+
+            let lifeHtml = '';
+            if (t.life) {
+                lifeHtml = `
+            <div class="section section-life">
+                <h3 class="icon-life">生活實例</h3>
+                <p>${t.life}</p>
+            </div>`;
+            }
+
+            div.innerHTML = `
+            <h1 class="term-title">${t.term}</h1>
+            <span class="term-category">${t.category}</span>
+
+            <div class="section section-formal">
+                <h3 class="icon-formal">表面意思</h3>
+                <p>${t.formal}</p>
+            </div>
+
+            <div class="section ${logicClass}">
+                <h3 class="${iconLogic}">邏輯本質</h3>
+                <div id="displayLogic">${t.logic}</div>
+            </div>
+
+            <div class="section section-plain">
+                <h3 class="icon-plain">白話文翻譯</h3>
+                <p>${t.plain}</p>
+            </div>
+            
+            ${lifeHtml}
+        `;
+            return div;
+        }
+
+        searchInput.addEventListener('input', (e) => renderList(e.target.value));
+
+
+        // Portfolio Logic
+        function calcRow(tr) {
+            // Find inputs within the row
+            const shareInput = tr.querySelector('.p-share');
+            const costInput = tr.querySelector('.p-cost');
+            const priceInput = tr.querySelector('.p-price');
+
+            if (!shareInput || !costInput || !priceInput) return;
+
+            const shares = parseFloat(shareInput.value) || 0;
+            const cost = parseFloat(costInput.value) || 0;
+            const price = parseFloat(priceInput.value) || 0;
+            const profitEl = tr.querySelector('.p-profit');
+
+            if (cost === 0) return;
+
+            const profitVal = (price - cost) * shares;
+            const profitPct = ((price - cost) / cost) * 100;
+
+            // Display with localized format
+            profitEl.innerText = `${profitVal.toLocaleString('en-US', { maximumFractionDigits: 0 })} (${profitPct > 0 ? '+' : ''}${profitPct.toFixed(1)}%)`;
+
+            // Color logic (TW Stock Style: Red is Up, Green is Down)
+            if (profitVal > 0) {
+                profitEl.style.color = '#dc2626'; // Red
+            } else if (profitVal < 0) {
+                profitEl.style.color = '#16a34a'; // Green
+            } else {
+                profitEl.style.color = '#64748b'; // Grey
+            }
+
+            calcTotal();
+        }
+
+        function calcTotal() {
+            let totalProfit = 0;
+            let totalCost = 0;
+            let totalValue = 0;
+            document.querySelectorAll('.portfolio-table tbody tr').forEach(tr => {
+                const shares = parseFloat(tr.querySelector('.p-share')?.value) || 0;
+                const cost = parseFloat(tr.querySelector('.p-cost')?.value) || 0;
+                const price = parseFloat(tr.querySelector('.p-price')?.value) || 0;
+
+                totalProfit += (price - cost) * shares;
+                totalCost += cost * shares;
+                totalValue += price * shares;
+            });
+
+            // Update Total Holding Cost
+            const totalCostEl = document.getElementById('totalCost');
+            if (totalCostEl) {
+                totalCostEl.innerText = totalCost.toLocaleString('en-US', { maximumFractionDigits: 0 });
+            }
+
+            // Update Total Market Value
+            const totalValueEl = document.getElementById('totalValue');
+            if (totalValueEl) {
+                totalValueEl.innerText = totalValue.toLocaleString('en-US', { maximumFractionDigits: 0 });
+            }
+
+            // Update Total Estimated Profit
+            const totalProfitEl = document.getElementById('totalProfit');
+            if (totalProfitEl) {
+                totalProfitEl.innerText = totalProfit.toLocaleString('en-US', { maximumFractionDigits: 0 });
+                if (totalProfit > 0) totalProfitEl.style.color = '#dc2626';
+                else if (totalProfit < 0) totalProfitEl.style.color = '#16a34a';
+                else totalProfitEl.style.color = '#64748b';
+            }
+        }
+
+        // Real-time Quotes fetching
+        let latestQuotes = {};
+        function handleManualRefresh(btn, event) {
+            if (event) event.stopPropagation(); // 避免點擊冒泡
+            btn.classList.add('spinning');
+            btn.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"></path><path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path><path d="M3 22v-6h6"></path><path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path></svg> 更新中`;
+            fetchQuotes(btn);
+        }
+
+        function fetchQuotes(btn = null) {
+            const symbols = ['0056.TW', '00891.TW', '00919.TW'];
+            const timestamp = Date.now(); // 加上時間戳防止瀏覽器快取舊資料
+
+            // 判斷是否部署在 Netlify，如果是，使用我們建立好的 _redirects 繞過 CORS
+            const isNetlify = window.location.hostname.includes('netlify.app');
+
+            Promise.all(symbols.map(sym => {
+                let fetchPromise;
+
+                if (isNetlify) {
+                    // Netlify 環境下使用內建反向代理
+                    fetchPromise = fetch(`/api/yahoo/${sym}?region=TW&lang=zh-Hant-TW&t=${timestamp}`)
+                        .then(res => res.json());
+                } else {
+                    // 本機測試時，則使用先前的 corsproxy.io
+                    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${sym}?region=TW&lang=zh-Hant-TW&t=${timestamp}`;
+                    fetchPromise = fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`)
+                        .then(res => res.json());
+                }
+
+                return fetchPromise.then(data => {
+                    if (data && data.chart && data.chart.result && data.chart.result.length > 0) {
+                        const price = data.chart.result[0].meta.regularMarketPrice;
+                        return { code: sym.replace('.TW', ''), price: price };
+                    }
+                    return null;
+                });
+            }))
+                .then(results => {
+                    results.forEach(r => {
+                        if (r && r.price) {
+                            latestQuotes[r.code] = r.price;
+                        }
+                    });
+                    updateQuotesInTable();
+
+                    if (btn) {
+                        btn.classList.remove('spinning');
+                        btn.innerHTML = `<span style="color:#16a34a; font-weight:bold;">✓</span> 已更新`;
+                        setTimeout(() => {
+                            btn.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"></path><path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path><path d="M3 22v-6h6"></path><path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path></svg> 整理`;
+                        }, 2000);
+                    }
+                })
+                .catch(err => {
+                    console.error("無法取得最新報價:", err);
+                    if (btn) {
+                        btn.classList.remove('spinning');
+                        btn.innerHTML = `<span style="color:#dc2626;">✕</span> 失敗`;
+                        setTimeout(() => {
+                            btn.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"></path><path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path><path d="M3 22v-6h6"></path><path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path></svg> 整理`;
+                        }, 2000);
+                    }
+                });
+        }
+
+        function updateQuotesInTable() {
+            const trs = document.querySelectorAll('.portfolio-table tbody tr');
+            let updated = false;
+            trs.forEach(tr => {
+                const codeTd = tr.querySelector('td:first-child');
+                if (codeTd) {
+                    const code = codeTd.innerText.trim();
+                    const priceInput = tr.querySelector('.p-price');
+                    if (priceInput && latestQuotes[code] && !isNaN(latestQuotes[code])) {
+                        if (priceInput.value !== latestQuotes[code].toString()) {
+                            priceInput.value = latestQuotes[code];
+                            updated = true;
+                        }
+                        // 加入綠底提示更新 (選用)
+                        // priceInput.style.backgroundColor = '#ecfdf5';
+                        calcRow(tr);
+                    }
+                }
+            });
+
+            // 如果有成功更新，可以在表格旁邊加一個提示
+            if (updated) {
+                const titleEl = document.querySelector('.portfolio-title-hint');
+                if (titleEl) {
+                    titleEl.innerText = "您的黃金組合 (已自動載入最新收盤價)：";
+                    titleEl.style.color = "#2563eb";
+                }
+            }
+        }
+
+        // Initialize calculations when content loads
+        // Init
+        fetchQuotes();
+        renderList();
+
+
+    </script>
+
+</body>
+
+</html>
