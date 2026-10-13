@@ -217,7 +217,7 @@
 
         /* Portfolio Table Inputs */
         .inp-num {
-            width: 90px;
+            width: 60px;
             padding: 4px 8px;
             border: 1px solid #cbd5e1;
             border-radius: 4px;
@@ -232,6 +232,28 @@
             box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
         }
 
+        .p-share {
+            width: 80px;
+        }
+
+        /* Ultra-compact inputs for ticker/dividend */
+        .p-code {
+            width: 60px !important;
+            padding: 1px 2px !important;
+            box-sizing: border-box;
+        }
+
+        .p-dividend {
+            width: 54px !important;
+            padding: 1px 2px !important;
+            box-sizing: border-box;
+        }
+
+        .p-month {
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
         .text-green {
             color: #16a34a;
             font-weight: bold;
@@ -244,6 +266,23 @@
 
         .fw-bold {
             font-weight: bold;
+        }
+
+        .quarter-row td {
+            padding-top: 0 !important;
+            padding-bottom: 4px !important;
+            font-size: 0.68rem;
+            line-height: 1;
+            color: #64748b;
+        }
+
+        .quarter-row td:nth-child(5) {
+            text-align: right;
+            padding-right: 8px !important;
+        }
+
+        .p-quarterly {
+            white-space: nowrap;
         }
 
         /* Refresh Button Styles */
@@ -357,6 +396,7 @@
             .portfolio-table th,
             .portfolio-table td {
                 padding: 6px !important;
+                vertical-align: top;
             }
 
             .inp-num {
@@ -418,7 +458,7 @@
                                 <tr style="background:#f1f5f9; text-align:left;">
                                     <th style="padding:8px;">代號</th>
                                     <th style="padding:8px;">配息月份</th>
-                                    <th style="padding:8px;">近期配息</th>
+                                    <th style="padding:8px;">近期<br>配息</th>
                                     <th style="padding:8px;">年化殖利率</th>
                                     <th style="padding:8px;">股數 (Shares)</th>
                                     <th style="padding:8px;">持有成本</th>
@@ -427,54 +467,69 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr style="border-bottom: 1px solid #e2e8f0;" oninput="calcRow(this)">
-                                    <td style="padding:8px; font-weight:bold;">0056</td>
-                                    <td style="padding:8px;">1, 4, 7, 10</td>
-                                    <td style="padding:8px;">$0.866</td>
-                                    <td style="padding:8px; color:#16a34a;">9.69%</td>
-                                    <td style="padding:8px;"><input type="number" value="5000" step="100" class="inp-num p-share"></td>
-                                    <td style="padding:8px;"><input type="number" value="32.10" step="0.01" class="inp-num p-cost"></td>
-                                    <td style="padding:8px;"><input type="number" value="37.55" step="0.01" class="inp-num p-price"></td>
+                                <tr style="border-bottom: 0;" oninput="calcRow(this)">
+                                    <td style="padding:8px; font-weight:bold;"><input type="text" value="00927" class="inp-num p-code" style="text-align:left; width:52px;"></td>
+                                    <td class="p-month" style="padding:8px;">1,4,7,10</td>
+                                    <td style="padding:8px;"><input type="number" value="2.00" step="0.1" min="0" class="inp-num p-dividend" style="text-align:right; width:44px;"></td>
+                                    <td style="padding:8px; color:#16a34a;"><input type="number" value="14.22" step="0.1" min="0" class="inp-num p-yield" style="text-align:right; width:60px;"></td>
+                                    <td style="padding:8px;"><input type="number" value="10000" step="1000" class="inp-num p-share"></td>
+                                    <td style="padding:8px;"><input type="number" value="24.47" step="0.01" class="inp-num p-cost"></td>
+                                    <td style="padding:8px;"><input type="number" value="40.29" step="0.01" class="inp-num p-price"></td>
                                     <td style="padding:8px; font-weight:bold;" class="p-profit">--</td>
                                 </tr>
-                                <tr style="border-bottom: 1px solid #e2e8f0;" oninput="calcRow(this)">
-                                    <td style="padding:8px; font-weight:bold;">00891</td>
-                                    <td style="padding:8px;">2, 5, 8, 11</td>
-                                    <td style="padding:8px;">$0.60</td>
-                                    <td style="padding:8px; color:#16a34a;">9.15%</td>
-                                    <td style="padding:8px;"><input type="number" value="5000" step="100" class="inp-num p-share"></td>
-                                    <td style="padding:8px;"><input type="number" value="18.02" step="0.01" class="inp-num p-cost"></td>
-                                    <td style="padding:8px;"><input type="number" value="23.23" step="0.01" class="inp-num p-price"></td>
+                                <tr class="quarter-row" style="border-bottom: 1px solid #e2e8f0;">
+                                    <td></td><td></td><td></td><td></td>
+                                    <td><div class="p-quarterly">當季配息：--</div></td>
+                                    <td></td><td></td><td></td>
+                                </tr>
+                                <tr style="border-bottom: 0;" oninput="calcRow(this)">
+                                    <td style="padding:8px; font-weight:bold;"><input type="text" value="00891" class="inp-num p-code" style="text-align:left; width:52px;"></td>
+                                    <td class="p-month" style="padding:8px;">2,5,8,11</td>
+                                    <td style="padding:8px;"><input type="number" value="1.55" step="0.1" min="0" class="inp-num p-dividend" style="text-align:right; width:44px;"></td>
+                                    <td style="padding:8px; color:#16a34a;"><input type="number" value="14.42" step="0.1" min="0" class="inp-num p-yield" style="text-align:right; width:60px;"></td>
+                                    <td style="padding:8px;"><input type="number" value="20000" step="1000" class="inp-num p-share"></td>
+                                    <td style="padding:8px;"><input type="number" value="37.38" step="0.01" class="inp-num p-cost"></td>
+                                    <td style="padding:8px;"><input type="number" value="37.40" step="0.01" class="inp-num p-price"></td>
                                     <td style="padding:8px; font-weight:bold;" class="p-profit">--</td>
                                 </tr>
-                                <tr>
-                                    <td style="padding:8px; font-weight:bold;" oninput="calcRow(this)">00919</td>
-                                    <td style="padding:8px;">3, 6, 9, 12</td>
-                                    <td style="padding:8px;">$0.54</td>
-                                    <td style="padding:8px; color:#16a34a;">10.76%</td>
-                                    <td style="padding:8px;"><input type="number" value="19000" step="100" class="inp-num p-share"></td>
-                                    <td style="padding:8px;"><input type="number" value="21.15" step="0.01" class="inp-num p-cost"></td>
-                                    <td style="padding:8px;"><input type="number" value="23.31" step="0.01" class="inp-num p-price"></td>
+                                <tr class="quarter-row" style="border-bottom: 1px solid #e2e8f0;">
+                                    <td></td><td></td><td></td><td></td>
+                                    <td><div class="p-quarterly">當季配息：--</div></td>
+                                    <td></td><td></td><td></td>
+                                </tr>
+                                <tr style="border-bottom: 0;" oninput="calcRow(this)">
+                                    <td style="padding:8px; font-weight:bold;"><input type="text" value="00919" class="inp-num p-code" style="text-align:left; width:52px;"></td>
+                                    <td class="p-month" style="padding:8px;">3,6,9,12</td>
+                                    <td style="padding:8px;"><input type="number" value="1.10" step="0.1" min="0" class="inp-num p-dividend" style="text-align:right; width:44px;"></td>
+                                    <td style="padding:8px; color:#16a34a;"><input type="number" value="12.49" step="0.1" min="0" class="inp-num p-yield" style="text-align:right; width:60px;"></td>
+                                    <td style="padding:8px;"><input type="number" value="30000" step="1000" class="inp-num p-share"></td>
+                                    <td style="padding:8px;"><input type="number" value="31.40" step="0.01" class="inp-num p-cost"></td>
+                                    <td style="padding:8px;"><input type="number" value="32.40" step="0.01" class="inp-num p-price"></td>
                                     <td style="padding:8px; font-weight:bold;" class="p-profit">--</td>
+                                </tr>
+                                <tr class="quarter-row">
+                                    <td></td><td></td><td></td><td></td>
+                                    <td><div class="p-quarterly">當季配息：--</div></td>
+                                    <td></td><td></td><td></td>
                                 </tr>
                             </tbody>
                             <tfoot>
                                 <tr style="background:#f8fafc; font-weight:bold; border-top: 2px solid #bfdbfe;">
-                                    <td colspan="7" style="text-align:right; padding:12px; border-bottom:1px solid #e2e8f0;">持有成本總額：</td>
-                                    <td id="totalCost" style="padding:12px; border-bottom:1px solid #e2e8f0; font-size:1.05rem; color:#475569;">--</td>
+                                    <td colspan="7" style="text-align:right; padding:8px; border-bottom:1px solid #e2e8f0;">持有成本總額：</td>
+                                    <td id="totalCost" style="padding:8px; border-bottom:1px solid #e2e8f0; font-size:0.95rem; color:#475569;">--</td>
                                 </tr>
                                 <tr style="background:#f8fafc; font-weight:bold;">
-                                    <td colspan="7" style="text-align:right; padding:12px; border-bottom:1px solid #e2e8f0;">帳面價值總計：</td>
-                                    <td id="totalValue" style="padding:12px; border-bottom:1px solid #e2e8f0; font-size:1.05rem; color:#1e293b;">--</td>
+                                    <td colspan="7" style="text-align:right; padding:8px; border-bottom:1px solid #e2e8f0;">帳面價值總計：</td>
+                                    <td id="totalValue" style="padding:8px; border-bottom:1px solid #e2e8f0; font-size:0.95rem; color:#1e293b;">--</td>
                                 </tr>
                                 <tr style="background:#eff6ff; font-weight:bold;">
-                                    <td colspan="7" style="text-align:right; padding:12px;">預估損益：</td>
-                                    <td id="totalProfit" style="padding:12px; font-size:1.1rem;">--</td>
+                                    <td colspan="7" style="text-align:right; padding:8px;">預估損益：</td>
+                                    <td id="totalProfit" style="padding:8px; font-size:1rem; line-height: 1.2;">--</td>
                                 </tr>
                             </tfoot>
                         </table>
                         </div>
-                        <p style="font-size:0.85rem; color:#64748b; margin-top:5px;">* 點擊數值欄位可使用鍵盤上下鍵調整 (股數±100 / 價格±0.01)；損益將自動重算。</p>
+                        <p style="font-size:0.85rem; color:#64748b; margin-top:5px;">* 點擊數值欄位可使用鍵盤上下鍵調整 (股數±1000 / 價格±0.01)；損益將自動重算。</p>
                     `
                     },
                     {
@@ -849,7 +904,16 @@
             const shares = parseFloat(shareInput.value) || 0;
             const cost = parseFloat(costInput.value) || 0;
             const price = parseFloat(priceInput.value) || 0;
+            const dividend = parseFloat(tr.querySelector('.p-dividend')?.value) || 0;
+            const quarterlyEl = tr.nextElementSibling && tr.nextElementSibling.classList.contains('quarter-row')
+                ? tr.nextElementSibling.querySelector('.p-quarterly')
+                : null;
             const profitEl = tr.querySelector('.p-profit');
+
+            if (quarterlyEl) {
+                const q = shares * dividend;
+                quarterlyEl.innerText = `季息：${q.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+            }
 
             if (cost === 0) return;
 
@@ -900,7 +964,12 @@
             // Update Total Estimated Profit
             const totalProfitEl = document.getElementById('totalProfit');
             if (totalProfitEl) {
-                totalProfitEl.innerText = totalProfit.toLocaleString('en-US', { maximumFractionDigits: 0 });
+                let totalProfitPct = (totalCost > 0) ? ((totalProfit / totalCost) * 100).toFixed(1) : 0;
+                let pctStr = `(${totalProfit > 0 ? '+' : ''}${totalProfitPct}%)`;
+                let numStr = totalProfit.toLocaleString('en-US', { maximumFractionDigits: 0 });
+
+                totalProfitEl.innerHTML = `${numStr}<br><span style="font-size: 0.85rem;">${pctStr}</span>`;
+
                 if (totalProfit > 0) totalProfitEl.style.color = '#dc2626';
                 else if (totalProfit < 0) totalProfitEl.style.color = '#16a34a';
                 else totalProfitEl.style.color = '#64748b';
@@ -909,6 +978,23 @@
 
         // Real-time Quotes fetching
         let latestQuotes = {};
+
+        async function fetchJsonWithFallback(paths) {
+            let lastErr = null;
+            let lastEp = null;
+            for (const ep of paths) {
+                try {
+                    lastEp = ep;
+                    const res = await fetch(ep, { cache: 'no-store' });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    return await res.json();
+                } catch (e) {
+                    lastErr = e;
+                }
+            }
+            throw new Error(`all fetch endpoints failed: ${lastEp} (${lastErr?.message || 'unknown'})`);
+        }
+
         function handleManualRefresh(btn, event) {
             if (event) event.stopPropagation(); // 避免點擊冒泡
             btn.classList.add('spinning');
@@ -916,34 +1002,42 @@
             fetchQuotes(btn);
         }
 
-        function fetchQuotes(btn = null) {
-            const symbols = ['0056.TW', '00891.TW', '00919.TW'];
-            const timestamp = Date.now(); // 加上時間戳防止瀏覽器快取舊資料
+        function getSymbolsFromTable() {
+            const symbols = [];
+            document.querySelectorAll('.portfolio-table tbody tr').forEach(tr => {
+                const codeInput = tr.querySelector('.p-code');
+                const raw = (codeInput?.value || '').trim();
+                if (!raw) return;
+                const code = raw.replace(/\.TW$/i, '').toUpperCase();
+                symbols.push(`${code}.TW`);
+            });
+            return symbols;
+        }
 
-            // 判斷是否部署在 Netlify，如果是，使用我們建立好的 _redirects 繞過 CORS
+        function fetchQuotes(btn = null) {
+            const symbols = getSymbolsFromTable();
+            const timestamp = Date.now(); // 防快取
             const isNetlify = window.location.hostname.includes('netlify.app');
 
-            Promise.all(symbols.map(sym => {
-                let fetchPromise;
+            Promise.all(symbols.map(async (sym) => {
+                const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${sym}?region=TW&lang=zh-Hant-TW&t=${timestamp}`;
+                const paths = isNetlify
+                    ? [
+                        `/api/yahoo/${sym}?region=TW&lang=zh-Hant-TW&t=${timestamp}`,
+                        `https://corsproxy.io/?${encodeURIComponent(yahooUrl)}`
+                    ]
+                    : [
+                        `https://corsproxy.io/?${encodeURIComponent(yahooUrl)}`,
+                        `https://api.allorigins.win/raw?url=${encodeURIComponent(yahooUrl)}`
+                    ];
 
-                if (isNetlify) {
-                    // Netlify 環境下使用內建反向代理
-                    fetchPromise = fetch(`/api/yahoo/${sym}?region=TW&lang=zh-Hant-TW&t=${timestamp}`)
-                        .then(res => res.json());
-                } else {
-                    // 本機測試時，則使用先前的 corsproxy.io
-                    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${sym}?region=TW&lang=zh-Hant-TW&t=${timestamp}`;
-                    fetchPromise = fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`)
-                        .then(res => res.json());
+                const data = await fetchJsonWithFallback(paths);
+
+                if (data && data.chart && data.chart.result && data.chart.result.length > 0) {
+                    const price = data.chart.result[0].meta.regularMarketPrice;
+                    return { code: sym.replace('.TW', ''), price: price };
                 }
-
-                return fetchPromise.then(data => {
-                    if (data && data.chart && data.chart.result && data.chart.result.length > 0) {
-                        const price = data.chart.result[0].meta.regularMarketPrice;
-                        return { code: sym.replace('.TW', ''), price: price };
-                    }
-                    return null;
-                });
+                return null;
             }))
                 .then(results => {
                     results.forEach(r => {
@@ -977,19 +1071,19 @@
             const trs = document.querySelectorAll('.portfolio-table tbody tr');
             let updated = false;
             trs.forEach(tr => {
-                const codeTd = tr.querySelector('td:first-child');
-                if (codeTd) {
-                    const code = codeTd.innerText.trim();
-                    const priceInput = tr.querySelector('.p-price');
-                    if (priceInput && latestQuotes[code] && !isNaN(latestQuotes[code])) {
-                        if (priceInput.value !== latestQuotes[code].toString()) {
-                            priceInput.value = latestQuotes[code];
-                            updated = true;
-                        }
-                        // 加入綠底提示更新 (選用)
-                        // priceInput.style.backgroundColor = '#ecfdf5';
-                        calcRow(tr);
+                const codeInput = tr.querySelector('.p-code');
+                const raw = (codeInput?.value || '').trim();
+                if (!raw) return;
+                const code = raw.replace(/\.TW$/i, '').toUpperCase();
+                const priceInput = tr.querySelector('.p-price');
+                if (priceInput && latestQuotes[code] && !isNaN(latestQuotes[code])) {
+                    if (priceInput.value !== latestQuotes[code].toString()) {
+                        priceInput.value = latestQuotes[code];
+                        updated = true;
                     }
+                    // 加入綠底提示更新 (選用)
+                    // priceInput.style.backgroundColor = '#ecfdf5';
+                    calcRow(tr);
                 }
             });
 
@@ -1003,9 +1097,10 @@
             }
         }
 
+
         // Initialize calculations when content loads
         // Init
-        fetchQuotes();
+        // 市場收盤後採用靜態資料，停用自動即時抓價
         renderList();
 
 
